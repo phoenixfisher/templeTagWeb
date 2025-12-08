@@ -2,9 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Sign In</title>
+    <title>Create Account</title>
 
     <style>
+        /* =====================
+           PAGE BASE
+        ====================== */
         body {
             margin: 0;
             min-height: 100vh;
@@ -15,44 +18,45 @@
             font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
-        /* Auth Section */
+        /* =====================
+           AUTH CARD
+        ====================== */
         .auth {
             width: 100%;
-            max-width: 380px;
+            max-width: 400px;
             background: #ffffff;
             padding: 32px;
             border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
         }
 
-        /* Title */
         .auth h2 {
+            margin-bottom: 20px;
             text-align: center;
-            margin-bottom: 24px;
             font-size: 1.6rem;
             color: #222;
         }
 
-        /* Form Layout */
+        /* =====================
+           FORM
+        ====================== */
         .auth-form {
             display: flex;
             flex-direction: column;
         }
 
-        /* Labels */
         .auth-form label {
-            font-size: 0.9rem;
             margin-top: 14px;
             margin-bottom: 6px;
+            font-size: 0.9rem;
             color: #555;
         }
 
-        /* Inputs */
         .auth-form input {
             padding: 10px 12px;
             font-size: 1rem;
-            border: 1px solid #ccc;
             border-radius: 6px;
+            border: 1px solid #ccc;
             outline: none;
             transition: border 0.2s ease, box-shadow 0.2s ease;
         }
@@ -62,9 +66,24 @@
             box-shadow: 0 0 0 2px rgba(79, 124, 255, 0.15);
         }
 
-        /* Button */
+        /* =====================
+           ERROR MESSAGE
+        ====================== */
+        .error {
+            margin-bottom: 14px;
+            padding: 10px;
+            background: #fdecea;
+            color: #b42318;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        /* =====================
+           BUTTONS
+        ====================== */
         .primary-btn {
-            margin-top: 24px;
+            margin-top: 22px;
             padding: 12px;
             font-size: 1rem;
             font-weight: 600;
@@ -72,7 +91,7 @@
             border-radius: 6px;
             cursor: pointer;
             background-color: #4f7cff;
-            color: #fff;
+            color: #ffffff;
             transition: background-color 0.2s ease, transform 0.1s ease;
         }
 
@@ -87,30 +106,63 @@
         .full-width {
             width: 100%;
         }
+
+        /* =====================
+           FOOTER LINKS
+        ====================== */
+        .auth-footer {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #555;
+        }
+
+        .auth-footer a {
+            color: #4f7cff;
+            text-decoration: none;
+            font-weight: 500;
+        }
     </style>
 </head>
 
 <body>
 
     <section class="auth">
-        <h2>User Login</h2>
+        <h2>Create Account</h2>
 
-        <form action="/login" method="POST" class="auth-form">
-            
+        <% if (error_message) { %>
+            <div class="error"><%= error_message %></div>
+        <% } %>
+
+        <form action="/create-account" method="POST" class="auth-form">
+
             <label for="username">Username</label>
-            <input id="username" type="text" name="username" required>
+            <input
+                id="username"
+                type="text"
+                name="username"
+                required
+            >
 
             <label for="password">Password</label>
-            <input id="password" type="password" name="password" required>
+            <input
+                id="password"
+                type="password"
+                name="password"
+                required
+            >
 
             <button type="submit" class="primary-btn full-width">
-                Login
+                Create Account
             </button>
 
         </form>
+
+        <div class="auth-footer">
+            Already have an account?
+            <a href="/login">Sign in</a>
+        </div>
     </section>
 
 </body>
 </html>
-
-
