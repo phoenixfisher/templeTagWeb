@@ -1,12 +1,116 @@
-<section class="auth">
-  <h2>Sign in</h2>
-  <form method="post" action="/login" class="auth-form">
-    <label for="email">Email</label>
-    <input id="email" type="email" name="email" required />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign In</title>
 
-    <label for="password">Password</label>
-    <input id="password" type="password" name="password" required />
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #f4f6fb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
 
-    <button type="submit" class="primary-btn full-width">Sign in</button>
-  </form>
-</section>
+        /* Auth Section */
+        .auth {
+            width: 100%;
+            max-width: 380px;
+            background: #ffffff;
+            padding: 32px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Title */
+        .auth h2 {
+            text-align: center;
+            margin-bottom: 24px;
+            font-size: 1.6rem;
+            color: #222;
+        }
+
+        /* Form Layout */
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Labels */
+        .auth-form label {
+            font-size: 0.9rem;
+            margin-top: 14px;
+            margin-bottom: 6px;
+            color: #555;
+        }
+
+        /* Inputs */
+        .auth-form input {
+            padding: 10px 12px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            outline: none;
+            transition: border 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .auth-form input:focus {
+            border-color: #4f7cff;
+            box-shadow: 0 0 0 2px rgba(79, 124, 255, 0.15);
+        }
+
+        /* Button */
+        .primary-btn {
+            margin-top: 24px;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background-color: #4f7cff;
+            color: #fff;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+
+        .primary-btn:hover {
+            background-color: #3e66d6;
+        }
+
+        .primary-btn:active {
+            transform: translateY(1px);
+        }
+
+        .full-width {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="auth">
+        <h2>User Login</h2>
+
+        <form action="/login" method="POST" class="auth-form">
+            
+            <label for="username">Username</label>
+            <input id="username" type="text" name="username" required>
+
+            <label for="password">Password</label>
+            <input id="password" type="password" name="password" required>
+
+            <button type="submit" class="primary-btn full-width">
+                Login
+            </button>
+
+        </form>
+    </section>
+
+</body>
+</html>
+
+
