@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("partials/header", { title: title || "Temple Tag" }) %>
+</head>
+<body>
+    <header>
+        <div class="brand">
+            <img src="/LightTransparentTempleIcon.png" alt="Temple Tag logo" />
+            <h1>Temple Tag</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="#">Temples</a></li>
+                <li><a href="#">Goals</a></li>
+                <li><a href="/login">Sign In</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <%- include(bodyPartial) %>
+    </main>
+
+    <%- include("partials/footer") %>
+</body>
+</html>
