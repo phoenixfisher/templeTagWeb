@@ -15,52 +15,110 @@
     <div class="error"><%= error_message %></div>
   <% } %>
 
-  <% if (!temples || temples.length === 0) { %>
-    <p class="muted center">No temples to show right now.</p>
-  <% } else { %>
-    <div class="card-grid" id="temple-grid">
-      <% temples.forEach((temple) => { 
-        const locationParts = [temple.city, temple.state, temple.country].filter(Boolean);
-        const searchIndex = [temple.name, temple.city, temple.state, temple.country, temple.status].filter(Boolean).join(" ").toLowerCase();
-        const statusLabel = (temple.status || "unknown").replace(/_/g, " ");
-      %>
-        <article class="card" data-search="<%= searchIndex %>">
-          <div class="card-media" style="<%= temple.photoThumb ? `background-image: url('${temple.photoThumb}')` : '' %>"></div>
-          <div class="card-body">
-            <div class="row-between" style="align-items: center;">
-              <h3><%= temple.name %></h3>
-              <span class="pill <%= temple.status || 'unknown' %>"><%= statusLabel %></span>
-            </div>
-            <p><strong><%= locationParts.join(", ") || "Location coming soon" %></strong></p>
-            <p class="muted"><%= temple.address || "Address TBA" %></p>
-            <div class="card-links">
-              <% if (temple.website) { %>
-                <a href="<%= temple.website %>" target="_blank" rel="noopener noreferrer">Temple details</a>
-              <% } %>
-              <% if (temple.appointments) { %>
-                <a href="<%= temple.appointments %>" target="_blank" rel="noopener noreferrer">Schedule</a>
-              <% } %>
-            </div>
-          </div>
-        </article>
-      <% }) %>
+  <div class="temple-layout">
+    <!-- Filters (always visible) -->
+    <aside class="card filters">
+      <div class="stack">
+        <strong>Status</strong>
+        <% ["dedicated","under_construction","announced"].forEach(s => { %>
+          <label>
+            <input type="checkbox" class="filter-status" value="<%= s %>" checked>
+            <%= s.replace("_"," ").toUpperCase() %>
+          </label>
+        <% }) %>
+      </div>
+
+      <div class="stack">
+        <label for="country">Country</label>
+        <select id="country" class="input">
+          <option value="">All countries</option>
+          <% Array.from(new Set(temples.map(t => t.country).filter(Boolean))).sort().forEach(c => { %>
+            <option value="<%= c %>"><%= c %></option>
+          <% }) %>
+        </select>
+      </div>
+
+      <label><input type="checkbox" id="has-appointments"> Has appointments</label>
+    </aside>
+
+    <div>
+      <% if (!temples || temples.length === 0) { %>
+        <p class="muted center">No temples to show right now.</p>
+      <% } else { %>
+        <!-- Temples -->
+        <div class="card-grid" id="temple-grid">
+          <% temples.forEach((temple) => { 
+            const locationParts = [temple.city, temple.state, temple.country].filter(Boolean);
+            const searchIndex = [temple.name, temple.city, temple.state, temple.country, temple.status].filter(Boolean).join(" ").toLowerCase();
+            const statusLabel = (temple.status || "unknown").replace(/_/g, " "); %>
+            <article class="card temple-card" 
+              data-search="<%= searchIndex %>"
+              data-status="<%= temple.status || '' %>"
+              data-country="<%= temple.country || '' %>"
+              data-appointments="<%= temple.appointments ? 'yes' : 'no' %>">
+              <div class="card-media" style="<%= temple.photoThumb ? `background-image: url('${temple.photoThumb}')` : '' %>"></div>
+              <div class="card-body">
+                <div class="row-between" style="align-items: center;">
+                  <h3><%= temple.name %></h3>
+                  <span class="pill <%= temple.status || 'unknown' %>"><%= statusLabel %></span>
+                </div>
+                <p><strong><%= locationParts.join(", ") || "Location coming soon" %></strong></p>
+                <p class="muted"><%= temple.address || "Address TBA" %></p>
+                <div class="card-links">
+                  <% if (temple.website) { %>
+                    <a href="<%= temple.website %>" target="_blank" rel="noopener noreferrer">Temple details</a>
+                  <% } %>
+                  <% if (temple.appointments) { %>
+                    <a href="<%= temple.appointments %>" target="_blank" rel="noopener noreferrer">Schedule</a>
+                  <% } %>
+                </div>
+              </div>
+            </article>
+          <% }) %>
+        </div>
+      <% } %>
     </div>
-  <% } %>
+  </div>
 </section>
 
 <script>
 (() => {
   const searchInput = document.getElementById("temple-search");
+  const countryFilter = document.getElementById("country");
+  const apptFilter = document.getElementById("has-appointments");
+  const statusChecks = document.querySelectorAll(".filter-status");
   const cards = document.querySelectorAll(".temple-card");
 
-  if (!searchInput || !cards.length) return;
+  if (!cards.length) return;
 
-  searchInput.addEventListener("input", (event) => {
-    const query = event.target.value.trim().toLowerCase();
-    cards.forEach((card) => {
-      const haystack = card.getAttribute("data-search") || "";
-      card.style.display = haystack.includes(query) ? "" : "none";
+  const applyFilters = () => {
+    const q = (searchInput?.value || "").trim().toLowerCase();
+    const country = countryFilter?.value || "";
+    const wantAppt = apptFilter?.checked;
+    const activeStatuses = Array.from(statusChecks).filter(c => c.checked).map(c => c.value);
+
+    cards.forEach(card => {
+      const haystack = (card.getAttribute("data-search") || "").toLowerCase();
+      const status = card.getAttribute("data-status") || "";
+      const ctry = card.getAttribute("data-country") || "";
+      const hasAppt = card.getAttribute("data-appointments") === "yes";
+
+      const matchesText = haystack.includes(q);
+      const matchesStatus = !activeStatuses.length || activeStatuses.includes(status);
+      const matchesCountry = !country || ctry === country;
+      const matchesAppt = !wantAppt || hasAppt;
+
+      card.style.display = (matchesText && matchesStatus && matchesCountry && matchesAppt) ? "" : "none";
     });
+  };
+
+  [searchInput, countryFilter, apptFilter, ...statusChecks].forEach(ctrl => {
+    if (ctrl) {
+      ctrl.addEventListener("input", applyFilters);
+      ctrl.addEventListener("change", applyFilters);
+    }
   });
+
+  applyFilters();
 })();
 </script>
