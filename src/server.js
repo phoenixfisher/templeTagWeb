@@ -37,6 +37,12 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 
+// Make user available to ejs
+app.use((req, res, next) => {
+  res.locals.user = req.session.user || null;
+  next();
+});
+
 app.get("/", (req, res) => {
   res.render("layout", { title: "Temple Tag", bodyPartial: "landing" });
 });

@@ -14,7 +14,11 @@
                 <li><a href="/">Home</a></li>
                 <li><a href="#">Temples</a></li>
                 <li><a href="#">Goals</a></li>
-                <li><a href="/login">Sign In</a></li>
+                <% if (user) { %>
+                    <li><a href="/logout">Logout</a></li>
+                <% } else { %>
+                    <li><a href="/login">Sign In</a></li>
+                <% } %>
             </ul>
         </nav>
     </header>
