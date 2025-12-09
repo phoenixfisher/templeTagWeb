@@ -5,17 +5,44 @@
     <div class="error"><%= error_message %></div>
   <% } %>
 
-  <form action="/create-account" method="POST" class="auth-form">
+  <form action="/create-account" method="POST" class="auth-form" id="create-account">
     <label for="username">Username</label>
-    <input id="username" type="text" name="username" required />
+    <input id="username" type="text" name="username" placeholder="Enter a username" required />
 
     <label for="password">Password</label>
-    <input id="password" type="password" name="password" required />
+    <input id="password" type="password" name="password" placeholder="Enter a password" required />
 
-    <button type="submit" class="primary-btn full-width">Create Account</button>
+    <label for="confirmPassword">Confirm password</label>
+    <input id="confirmPassword" type="password" name="confirmPassword" placeholder="Re-enter your password" required />
+
+    <div id="password-help" class="field-help"></div>
+
+    <button type="submit" class="primary-btn full-width" id="submitBtn">Create Account</button>
   </form>
 
   <div class="auth-footer">
     Already have an account? <a href="/login">Sign in</a>
   </div>
 </section>
+
+<script>
+  const form = document.getElementById("create-account");
+  const password = document.getElementById("password");
+  const confirmPassword = document.getElementById("confirmPassword");
+  const help = document.getElementById("password-help");
+  const submitBtn = document.getElementById("submitBtn");
+
+  function syncState() {
+    const isMatch = confirmPassword.value === password.value && password.value !== "";
+    help.textContent = isMatch ? "" : "Passwords do not match.";
+    help.style.color = isMatch ? "" : "red";
+    confirmPassword.classList.toggle("invalid", !isMatch && confirmPassword.value);
+    submitBtn.disabled = !isMatch;
+  }
+
+  confirmPassword.addEventListener("input", syncState);
+  password.addEventListener("input", syncState);
+  form.addEventListener("submit", (e) => {
+    if (submitBtn.disabled) e.preventDefault();
+  });
+</script>
