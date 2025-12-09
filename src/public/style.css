@@ -176,6 +176,29 @@ nav a:hover {
     border-color: #80d8ff;
 }
 
+.error {
+    margin-bottom: 0.75rem;
+    padding: 0.75rem;
+    background: #fdecea;
+    color: #b42318;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    text-align: center;
+}
+
+.auth-footer {
+    margin-top: 0.9rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.auth-footer a {
+    color: #005b8f;
+    text-decoration: none;
+    font-weight: 600;
+}
+
 .full-width {
     width: 100%;
     text-align: center;

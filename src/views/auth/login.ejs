@@ -1,135 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Sign In</title>
+<section class="auth">
+  <h2>Sign in</h2>
 
-    <style>
-        body {
-            margin: 0;
-            min-height: 100vh;
-            background: #f4f6fb;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-        }
+  <% if (error_message) { %>
+    <div class="error"><%= error_message %></div>
+  <% } %>
 
-        .auth {
-            width: 100%;
-            max-width: 380px;
-            background: #ffffff;
-            padding: 32px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-        }
+  <form method="post" action="/login" class="auth-form">
+    <label for="username">Username</label>
+    <input id="username" type="text" name="username" required />
 
-        .auth h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 1.6rem;
-            color: #222;
-        }
+    <label for="password">Password</label>
+    <input id="password" type="password" name="password" required />
 
-        .auth-form {
-            display: flex;
-            flex-direction: column;
-        }
+    <button type="submit" class="primary-btn full-width">Sign in</button>
+  </form>
 
-        .auth-form label {
-            font-size: 0.9rem;
-            margin-top: 14px;
-            margin-bottom: 6px;
-            color: #555;
-        }
-
-        .auth-form input {
-            padding: 10px 12px;
-            font-size: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            outline: none;
-        }
-
-        .auth-form input:focus {
-            border-color: #4f7cff;
-            box-shadow: 0 0 0 2px rgba(79, 124, 255, 0.15);
-        }
-
-        .primary-btn {
-            margin-top: 24px;
-            padding: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            background-color: #4f7cff;
-            color: #fff;
-        }
-
-        .primary-btn:hover {
-            background-color: #3e66d6;
-        }
-
-        .full-width {
-            width: 100%;
-        }
-
-        .error {
-            margin-bottom: 14px;
-            padding: 10px;
-            background: #fdecea;
-            color: #b42318;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            text-align: center;
-        }
-
-        .auth-footer {
-            margin-top: 18px;
-            text-align: center;
-            font-size: 0.85rem;
-        }
-
-        .auth-footer a {
-            color: #4f7cff;
-            text-decoration: none;
-        }
-    </style>
-</head>
-
-<body>
-
-    <section class="auth">
-        <h2>Sign In</h2>
-
-        <% if (error_message) { %>
-            <div class="error"><%= error_message %></div>
-        <% } %>
-
-        <form action="/login" method="POST" class="auth-form">
-
-            <label for="username">Username</label>
-            <input id="username" type="text" name="username" required>
-
-            <label for="password">Password</label>
-            <input id="password" type="password" name="password" required>
-
-            <button type="submit" class="primary-btn full-width">
-                Sign In
-            </button>
-
-        </form>
-
-        <div class="auth-footer">
-            Don’t have an account?
-            <a href="/create-account">Create one</a>
-        </div>
-    </section>
-
-</body>
-</html>
-
-
-
+  <div class="auth-footer">
+    Need an account? <a href="/create-account">Create one</a>
+  </div>
+</section>

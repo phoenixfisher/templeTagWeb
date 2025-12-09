@@ -43,12 +43,14 @@ app.get("/", (req, res) => {
 
 
 // -------------------------
-// AUTH ROUTES (NO layout)
+// AUTH ROUTES
 // -------------------------
 
 // Show login page
 app.get("/login", (req, res) => {
-  res.render("auth/login", {
+  res.render("layout", {
+    title: "Sign In — Temple Tag",
+    bodyPartial: "auth/login",
     error_message: "",
   });
 });
@@ -63,7 +65,9 @@ app.post("/login", async (req, res) => {
       .first();
 
     if (!user) {
-      return res.render("auth/login", {
+      return res.render("layout", {
+        title: "Sign In — Temple Tag",
+        bodyPartial: "auth/login",
         error_message: "Invalid username or password.",
       });
     }
@@ -90,12 +94,14 @@ app.get("/logout", (req, res) => {
 });
 
 // -------------------------
-// CREATE ACCOUNT (NO layout)
+// CREATE ACCOUNT
 // -------------------------
 
 // Show create account page
 app.get("/create-account", (req, res) => {
-  res.render("auth/create-account", {
+  res.render("layout", {
+    title: "Create Account — Temple Tag",
+    bodyPartial: "auth/create-account",
     error_message: "",
   });
 });
@@ -106,7 +112,9 @@ app.post("/create-account", async (req, res) => {
   const level = "U";
 
   if (!username || !password) {
-    return res.render("auth/create-account", {
+    return res.render("layout", {
+      title: "Create Account — Temple Tag",
+      bodyPartial: "auth/create-account",
       error_message: "Username and password are required.",
     });
   }
@@ -119,12 +127,16 @@ app.post("/create-account", async (req, res) => {
     console.error(err.message);
 
     if (err.code === "23505") {
-      return res.render("auth/create-account", {
+      return res.render("layout", {
+        title: "Create Account — Temple Tag",
+        bodyPartial: "auth/create-account",
         error_message: "Username already exists.",
       });
     }
 
-    res.render("auth/create-account", {
+    res.render("layout", {
+      title: "Create Account — Temple Tag",
+      bodyPartial: "auth/create-account",
       error_message: "Unable to create user.",
     });
   }
@@ -136,5 +148,4 @@ app.post("/create-account", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
-
 
