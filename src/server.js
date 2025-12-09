@@ -183,6 +183,32 @@ app.get("/temples", async(req, res) => {
 });
 
 // -------------------------
+// USERS
+// -------------------------
+
+app.get("/users", async (req, res) => {
+  try {
+    const users = await knex("users").select("id", "username", "level");
+
+    res.render("layout", {
+      title: "Users — Temple Tag",
+      bodyPartial: "users/users",
+      users,
+      error_message: ""
+    });
+  } catch (err) {
+    console.error("Failed to load users:", err.message);
+
+    res.render("layout", {
+      title: "Users — Temple Tag",
+      bodyPartial: "users/users",
+      users: [],
+      error_message: "Unable to load users right now."
+    });
+  }
+});
+
+// -------------------------
 // Start server
 // -------------------------
 app.listen(PORT, () => {

@@ -14,7 +14,7 @@
                 <li><a href="/">Home</a></li>
                 <li><a href="/temples">Temples</a></li>
                 <li><a href="#">Goals</a></li>
-                <% if (user.level === 'M') { %>
+                <% if (user && user.level === 'M') { %>
                     <li><a href="/users">Users</a></li>
                 <% } %>
                 <% if (user) { %>
