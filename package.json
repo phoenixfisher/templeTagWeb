@@ -1,13 +1,43 @@
 {
+  "name": "templetagwebsite",
+  "version": "1.0.0",
+  "description": "Full-stack Node/Express application for tracking lds temple activity and goals.",
+  "keywords": [
+    "Temple",
+    "LDS",
+    "Tracking",
+    "Goal"
+  ],
+  "homepage": "https://github.com/phoenixfisher/templeTagWeb#readme",
+  "bugs": {
+    "url": "https://github.com/phoenixfisher/templeTagWeb/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phoenixfisher/templeTagWeb.git"
+  },
+  "license": "MIT",
+  "author": "Phoenix Fisher, Carson Oliver, Jake Fuhriman",
+  "type": "commonjs",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
+    "body-parser": "^2.2.1",
     "dotenv": "^17.2.3",
     "ejs": "^3.1.10",
-    "express": "^5.1.0",
+    "express": "^4.22.1",
     "express-session": "^1.18.2",
     "knex": "^3.1.0",
     "pg": "^8.16.3"
   },
-  "scripts": {
-    "start": "node src/server.js"
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
