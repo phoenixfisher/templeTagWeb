@@ -149,9 +149,42 @@ app.post("/create-account", async (req, res) => {
 });
 
 // -------------------------
+// Temples
+// -------------------------
+
+app.get("/temples", async(req, res) => {
+  try {
+    const templeApiUrl = new URL("https://templetag.temple-api.workers.dev/v1/temples");
+
+    const response = await fetch(templeApiUrl);
+
+    if (!response.ok) {
+      throw new Error(`Temple API responded with ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    res.render("layout", {
+      title: "Temples — Temple Tag",
+      bodyPartial: "temples/temples",
+      temples: data,
+      error_message: ""
+    });
+  } catch(err) {
+    console.error("Failed to fetch temples:", err.message);
+
+    res.render("layout", {
+      title: "Temples — Temple Tag",
+      bodyPartial: "temples/temples",
+      temples: [],
+      error_message: "We couldn’t load temples right now. Please try again shortly."
+    });
+  }
+});
+
+// -------------------------
 // Start server
 // -------------------------
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
-
