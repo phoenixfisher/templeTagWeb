@@ -1,14 +1,14 @@
-<section class="temples-page">
-  <div class="temples-header">
-    <div>
+<section class="page">
+  <div class="row-between">
+    <div class="stack">
       <p class="eyebrow">Explore Temples</p>
       <h2>Browse every temple worldwide</h2>
-      <p class="subtle">Search by name, city, or country to find the temples you want to track.</p>
+      <p class="muted">Search by name, city, or country to find the temples you want to track.</p>
     </div>
-    <div class="temples-search">
-      <label for="temple-search">Search</label>
-      <input id="temple-search" type="search" name="q" placeholder="Try “Utah” or “Accra”" />
-    </div>
+    <label class="input-group" for="temple-search">
+      <span>Search</span>
+      <input class="input" id="temple-search" type="search" name="q" placeholder="Try “Utah” or “Accra”" />
+    </label>
   </div>
 
   <% if (error_message) { %>
@@ -16,24 +16,24 @@
   <% } %>
 
   <% if (!temples || temples.length === 0) { %>
-    <p class="temples-empty">No temples to show right now.</p>
+    <p class="muted center">No temples to show right now.</p>
   <% } else { %>
-    <div class="temple-grid" id="temple-grid">
+    <div class="card-grid" id="temple-grid">
       <% temples.forEach((temple) => { 
         const locationParts = [temple.city, temple.state, temple.country].filter(Boolean);
         const searchIndex = [temple.name, temple.city, temple.state, temple.country, temple.status].filter(Boolean).join(" ").toLowerCase();
         const statusLabel = (temple.status || "unknown").replace(/_/g, " ");
       %>
-        <article class="temple-card" data-search="<%= searchIndex %>">
-          <div class="temple-photo" style="<%= temple.photoThumb ? `background-image: url('${temple.photoThumb}')` : '' %>"></div>
-          <div class="temple-meta">
-            <div class="temple-card-header">
+        <article class="card" data-search="<%= searchIndex %>">
+          <div class="card-media" style="<%= temple.photoThumb ? `background-image: url('${temple.photoThumb}')` : '' %>"></div>
+          <div class="card-body">
+            <div class="row-between" style="align-items: center;">
               <h3><%= temple.name %></h3>
-              <span class="temple-status temple-status-<%= temple.status || 'unknown' %>"><%= statusLabel %></span>
+              <span class="pill <%= temple.status || 'unknown' %>"><%= statusLabel %></span>
             </div>
-            <p class="temple-location"><%= locationParts.join(", ") || "Location coming soon" %></p>
-            <p class="temple-address"><%= temple.address || "Address TBA" %></p>
-            <div class="temple-links">
+            <p><strong><%= locationParts.join(", ") || "Location coming soon" %></strong></p>
+            <p class="muted"><%= temple.address || "Address TBA" %></p>
+            <div class="card-links">
               <% if (temple.website) { %>
                 <a href="<%= temple.website %>" target="_blank" rel="noopener noreferrer">Temple details</a>
               <% } %>
