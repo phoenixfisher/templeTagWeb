@@ -1,0 +1,62 @@
+<section class="page">
+  <div class="stack">
+    <p class="eyebrow">Your Progress</p>
+    <h2>Set goals and track your temple visits</h2>
+    <p class="muted">Stay organized with a simple checklist of the temples you plan to visit next.</p>
+  </div>
+
+  <div class="temple-layout">
+    <aside class="card filters">
+      <div class="stack">
+        <strong>Quick tips</strong>
+        <p class="muted">Pick 3–5 temples to focus on. Keep it realistic and celebrate small wins.</p>
+      </div>
+      <div class="stack">
+        <strong>Ideas</strong>
+        <ul class="muted" style="display: grid; gap: 0.4rem; padding-left: 1rem; list-style: disc;">
+          <li>Plan one new temple visit each quarter</li>
+          <li>Schedule an appointment for your next trip</li>
+          <li>Add notes about travel or family names</li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="card" style="padding: 1.2rem;">
+      <form class="stack" method="POST" action="#" onsubmit="event.preventDefault(); alert('Goals saving soon!');">
+        <div class="row-between" style="align-items: center;">
+          <div class="stack">
+            <h3>Your current goals</h3>
+            <p class="muted">Add temples you want to visit and mark them done when complete.</p>
+          </div>
+          <button class="primary-btn" type="submit">Save goals</button>
+        </div>
+
+        <div class="stack">
+          <label>
+            <span style="font-weight:600; color: var(--blue);">Temple goal 1</span>
+            <input class="input" type="text" name="goal1" placeholder="e.g., Visit Rome Italy Temple" />
+          </label>
+          <label>
+            <span style="font-weight:600; color: var(--blue);">Temple goal 2</span>
+            <input class="input" type="text" name="goal2" placeholder="e.g., Schedule an appointment in Mesa" />
+          </label>
+          <label>
+            <span style="font-weight:600; color: var(--blue);">Temple goal 3</span>
+            <input class="input" type="text" name="goal3" placeholder="e.g., Plan a family trip to Paris" />
+          </label>
+        </div>
+
+        <div class="stack">
+          <label class="row-between" style="align-items:center; gap:0.5rem;">
+            <span class="muted">Receive reminders</span>
+            <input type="checkbox" />
+          </label>
+          <label class="row-between" style="align-items:center; gap:0.5rem;">
+            <span class="muted">Mark as completed</span>
+            <input type="checkbox" />
+          </label>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
