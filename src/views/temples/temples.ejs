@@ -15,6 +15,17 @@
     <div class="error"><%= error_message %></div>
   <% } %>
 
+
+  <% if (totalPages > 1) { %>
+    <nav class="pagination">
+      <% const prev = page > 1 ? page - 1 : null; %>
+      <% const next = page < totalPages ? page + 1 : null; %>
+      <a class="page-btn" href="/temples?page=<%= prev || 1 %>" aria-disabled="<%= !prev %>">Prev</a>
+      <span class="page-indicator">Page <%= page %> of <%= totalPages %></span>
+      <a class="page-btn" href="/temples?page=<%= next || totalPages %>" aria-disabled="<%= !next %>">Next</a>
+    </nav>
+  <% } %>
+
   <div class="temple-layout">
     <!-- Filters (always visible) -->
     <aside class="card filters">
@@ -23,7 +34,7 @@
         <% ["dedicated","under_construction","announced"].forEach(s => { %>
           <label>
             <input type="checkbox" class="filter-status" value="<%= s %>" checked>
-            <%= s.replace("_"," ").toUpperCase() %>
+            <%= s.charAt(0).toUpperCase() + s.replace("_"," ").slice(1) %>
           </label>
         <% }) %>
       </div>

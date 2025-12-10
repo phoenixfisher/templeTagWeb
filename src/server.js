@@ -154,20 +154,27 @@ app.post("/create-account", async (req, res) => {
 
 app.get("/temples", async(req, res) => {
   try {
-    const templeApiUrl = new URL("https://templetag.temple-api.workers.dev/v1/temples");
+    const pageSize = 20;
+    const requested = Math.max(parseInt(req.query.page, 10) || 1, 1);
 
-    const response = await fetch(templeApiUrl);
+    const response = await fetch("https://templetag.temple-api.workers.dev/v1/temples");
+    if (!response.ok) throw new Error(`Temple API responded with ${response.status}`);
 
-    if (!response.ok) {
-      throw new Error(`Temple API responded with ${response.status}`);
-    }
-
-    const data = await response.json();
+    const all = await response.json();
+    const totalCount = all.length;
+    const totalPages = Math.max(Math.ceil(totalCount / pageSize), 1);
+    const page = Math.min(requested, totalPages);
+    const start = (page - 1) * pageSize;
+    const temples = all.slice(start, start + pageSize);
 
     res.render("layout", {
       title: "Temples — Temple Tag",
       bodyPartial: "temples/temples",
-      temples: data,
+      temples,
+      page,
+      totalPages,
+      totalCount,
+      pageSize,
       error_message: ""
     });
   } catch(err) {
