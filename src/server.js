@@ -224,9 +224,12 @@ app.get("/goals", async (req, res) => {
             .where({ userid: userID })     // <-- lowercase column name
             .orderBy("goal_start_date", "asc");
 
-        res.render("goals/goals", {
+        res.render("layout", {
+            title: "Goals",
+            bodyPartial: "goals/goals",
             user: req.session.user,
-            goals
+            goals,
+            error_message: ""
         });
 
     } catch (err) {
@@ -240,10 +243,14 @@ app.get("/goals", async (req, res) => {
 app.get("/goals/create-goals", (req, res) => {
     if (!req.session.user) return res.redirect("/login");
 
-    res.render("goals/create-goals", {
-        user: req.session.user
+    res.render("layout", {
+        title: "Create Goals",
+        bodyPartial: "goals/create-goals",
+        user: req.session.user,
+        error_message: ""
     });
 });
+
 
 
 // Handle form submission to create a goal
