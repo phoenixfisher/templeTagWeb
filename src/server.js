@@ -6,17 +6,17 @@ const express = require("express");
 const session = require("express-session");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // INIT KNEX
 const knex = require("knex")({
     client: "pg",
     connection: {
-        host: process.env.PGHOST,
-        user: process.env.PGUSER,
-        password: process.env.PGPASSWORD,
-        database: process.env.PGDATABASE,
-        port: process.env.PGPORT,
+        host: process.env.RDS_HOSTNAME || process.env.PGHOST,
+        user: process.env.RDS_USERNAME || process.env.PGUSER,
+        password: process.env.RDS_PASSWORD || process.env.PGPASSWORD,
+        database: process.env.RDS_DB_NAME || process.env.PGDATABASE,
+        port: process.env.RDS_PORT || process.env.PGPORT,
     }
 });
 
