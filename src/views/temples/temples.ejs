@@ -1,3 +1,6 @@
+<% const safeFilters = (typeof filters !== "undefined" && filters) ? filters : { q: "", country: "", statuses: [], appointments: false }; %>
+<% const safeCountries = (typeof countries !== "undefined" && countries) ? countries : []; %>
+
 <section class="page">
   <form class="stack" method="GET" action="/temples">
     <div class="row-between">
@@ -14,7 +17,7 @@
           type="search"
           name="q"
           placeholder="Try “Utah” or “Accra”"
-          value="<%= filters?.q || '' %>"
+          value="<%= safeFilters.q || '' %>"
         />
       </label>
     </div>
@@ -25,11 +28,11 @@
 
     <% const buildPageLink = (targetPage) => {
       const qs = new URLSearchParams();
-      if (filters?.q) qs.set("q", filters.q);
-      if (filters?.country) qs.set("country", filters.country);
-      if (filters?.appointments) qs.set("appointments", "1");
-      if (filters?.statuses?.length) {
-        filters.statuses.forEach(s => qs.append("status", s));
+      if (safeFilters.q) qs.set("q", safeFilters.q);
+      if (safeFilters.country) qs.set("country", safeFilters.country);
+      if (safeFilters.appointments) qs.set("appointments", "1");
+      if (safeFilters.statuses && safeFilters.statuses.length) {
+        safeFilters.statuses.forEach(s => qs.append("status", s));
       }
       qs.set("page", targetPage);
       return "/temples?" + qs.toString();
@@ -59,7 +62,7 @@
                 name="status"
                 class="filter-status"
                 value="<%= s %>"
-                <%= (!filters?.statuses?.length || filters.statuses.includes(s)) ? "checked" : "" %>
+                <%= (!safeFilters.statuses.length || safeFilters.statuses.includes(s)) ? "checked" : "" %>
               >
               <%= s.charAt(0).toUpperCase() + s.replace("_"," ").slice(1) %>
             </label>
@@ -70,18 +73,18 @@
           <strong>Country</strong>
           <select id="country" class="input" name="country">
             <option value="">All countries</option>
-            <% (countries || []).forEach(c => { %>
-              <option value="<%= c %>" <%= filters?.country === c ? "selected" : "" %>><%= c %></option>
+            <% safeCountries.forEach(c => { %>
+              <option value="<%= c %>" <%= safeFilters.country === c ? "selected" : "" %>><%= c %></option>
             <% }) %>
           </select>
         </div>
 
         <label>
-          <input type="checkbox" id="has-appointments" name="appointments" value="1" <%= filters?.appointments ? "checked" : "" %>>
+          <input type="checkbox" id="has-appointments" name="appointments" value="1" <%= safeFilters.appointments ? "checked" : "" %>>
           Has appointments
         </label>
 
-        <div class="row-between" style="align-items:center; gap:0.5rem; margin-top:0.75rem;">
+        <div class="row-between" style="align-items:center; gap:0.5rem; margin-top:0.75rem; margin-bottom: 0;">
           <button type="submit" class="page-btn">Apply filters</button>
           <a class="primary-btn" href="/temples">Clear</a>
         </div>

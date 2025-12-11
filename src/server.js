@@ -151,33 +151,56 @@ app.post("/create-account", async (req, res) => {
 // -------------------------
 // Temples
 // -------------------------
-
-app.get("/temples", async(req, res) => {
+app.get("/temples", async (req, res) => {
   try {
-    const templeApiUrl = new URL("https://templetag.temple-api.workers.dev/v1/temples");
+    const response = await fetch("https://templetag.temple-api.workers.dev/v1/temples");
+    if (!response.ok) throw new Error(`Temple API responded with ${response.status}`);
 
-    const response = await fetch(templeApiUrl);
+    const all = await response.json();
+    const countryIsClean = (c) => /^[A-Za-z .'-]+$/.test(c || "");
+    const cleanCountries = Array.from(new Set(all.map(t => t.country).filter(countryIsClean))).sort();
 
-    if (!response.ok) {
-      throw new Error(`Temple API responded with ${response.status}`);
-    }
+    const qRaw = (req.query.q || "").trim();
+    const q = qRaw.toLowerCase();
+    const countryRaw = (req.query.country || "").trim();
+    const country = countryRaw.toLowerCase();
+    const appointments = req.query.appointments === "1";
+    const statuses = Array.isArray(req.query.status)
+      ? req.query.status
+      : req.query.status
+        ? [req.query.status]
+        : [];
 
-    const data = await response.json();
+    const filtered = all.filter(t => {
+      const text = [t.name, t.city, t.state, t.country, t.status].filter(Boolean).join(" ").toLowerCase();
+      const statusMatch = !statuses.length || statuses.includes(t.status);
+      const countryMatch = !country || ((t.country || "").toLowerCase() === country && countryIsClean(t.country));
+      const apptMatch = !appointments || !!t.appointments;
+      const textMatch = !q || text.includes(q);
+      return statusMatch && countryMatch && apptMatch && textMatch;
+    });
 
     res.render("layout", {
       title: "Temples — Temple Tag",
       bodyPartial: "temples/temples",
-      temples: data,
-      error_message: ""
+      temples: filtered,
+      countries: cleanCountries,
+      filters: { q: qRaw, country: countryRaw, statuses, appointments },
+      page: 1,
+      totalPages: 1,
+      error_message: "",
     });
-  } catch(err) {
+  } catch (err) {
     console.error("Failed to fetch temples:", err.message);
-
     res.render("layout", {
       title: "Temples — Temple Tag",
       bodyPartial: "temples/temples",
       temples: [],
-      error_message: "We couldn’t load temples right now. Please try again shortly."
+      countries: [],
+      filters: { q: "", country: "", statuses: [], appointments: false },
+      page: 1,
+      totalPages: 1,
+      error_message: "We couldn’t load temples right now. Please try again shortly.",
     });
   }
 });
