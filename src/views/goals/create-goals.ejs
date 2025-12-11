@@ -1,76 +1,77 @@
-<% title = "Create Goal"; %>
+<section class="page">
+  <div class="stack">
+    <p class="eyebrow">New Goal</p>
+    <h2>Create a temple goal</h2>
+    <p class="muted">Set a goal that motivates and guides your temple attendance.</p>
+  </div>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/style.css">
-</head>
-<body>
+  <div class="temple-layout">
+    <aside class="card filters">
+      <div class="stack">
+        <strong>Quick tips</strong>
+        <p class="muted">Be specific and time-bound. Keep it realistic and celebrate small wins.</p>
+      </div>
+      <div class="stack">
+        <strong>Examples</strong>
+        <ul class="muted" style="display: grid; gap: 0.4rem; padding-left: 1rem; list-style: disc;">
+          <li>Attend 3 new temples this year</li>
+          <li>Schedule monthly appointments</li>
+          <li>Plan a family trip to a temple</li>
+        </ul>
+      </div>
+    </aside>
 
-<main class="container">
-
-    <div class="page-header">
-        <h1>Create a New Goal</h1>
-        <p class="subtitle">Set a goal that motivates and guides your temple attendance.</p>
-    </div>
-
-    <form class="form-card" action="/create-goal" method="POST">
-
-        <!-- Title -->
-        <div class="form-group">
-            <label for="title">Goal Title</label>
-            <input
-                type="text"
-                id="title"
-                name="title"
-                placeholder="Ex: Attend 12 different temples"
-                required
-            >
+    <div class="card" style="padding: 1.2rem;">
+      <form class="stack" action="/create-goal" method="POST">
+        <div class="row-between" style="align-items: center; gap: 0.75rem;">
+          <div class="stack">
+            <h3>Goal details</h3>
+            <p class="muted">Fill out the fields below to save your goal.</p>
+          </div>
+          <button class="primary-btn" type="submit">Save goal</button>
         </div>
 
-        <!-- Start Date -->
-        <div class="form-group">
-            <label for="goal_start_date">Start Date</label>
+        <div class="stack">
+          <label class="stack">
+            <span style="font-weight:600; color: var(--blue);">Goal title</span>
             <input
-                type="date"
-                id="goal_start_date"
-                name="goal_start_date"
-                required
-            >
-        </div>
+              class="input"
+              type="text"
+              name="title"
+              placeholder="e.g., Attend 12 different temples"
+              required
+            />
+          </label>
 
-        <!-- End Date -->
-        <div class="form-group">
-            <label for="goal_end_date">End Date (optional)</label>
-            <input
-                type="date"
-                id="goal_end_date"
-                name="goal_end_date"
-            >
-        </div>
+          <div class="row-between" style="gap: 0.75rem; align-items: flex-start; flex-wrap: wrap;">
+            <label class="stack" style="flex:1; min-width: 220px;">
+              <span style="font-weight:600; color: var(--blue);">Start date</span>
+              <input class="input" type="date" name="goal_start_date" required />
+            </label>
+            <label class="stack" style="flex:1; min-width: 220px;">
+              <span style="font-weight:600; color: var(--blue);">End date (optional)</span>
+              <input class="input" type="date" name="goal_end_date" />
+            </label>
+          </div>
 
-        <!-- Description -->
-        <div class="form-group">
-            <label for="description">Goal Description</label>
+          <label class="stack">
+            <span style="font-weight:600; color: var(--blue);">Description</span>
             <textarea
-                id="description"
-                name="description"
-                rows="4"
-                placeholder="Describe your goal: purpose, motivation, or specific milestones."
-                required
+              class="input"
+              name="description"
+              rows="4"
+              placeholder="Describe your goal: purpose, milestones, or how you'll track progress."
+              required
+              style="resize: vertical;"
             ></textarea>
+          </label>
         </div>
 
-        <div class="form-actions">
-            <button class="btn secondary" onclick="history.back()">Cancel</button>
-            <button type="submit" class="btn primary">Create Goal</button>
+        <div class="row-between" style="gap: 0.75rem; align-items: center;">
+          <a class="page-btn" href="/goals" style="text-align:center;">Cancel</a>
+          <button class="primary-btn" type="submit">Create goal</button>
         </div>
-
-    </form>
-
-</main>
-
-</body>
-</html>
+      </form>
+    </div>
+  </div>
+</section>

@@ -214,30 +214,60 @@ app.get("/users", async (req, res) => {
 
 // Show all goals for the logged-in user
 app.get("/goals", async (req, res) => {
-    if (!req.session.user) return res.redirect("/login");
+  if (!req.session.user) return res.redirect("/login");
 
-    const userID = req.session.user.userid;
+  const userID = req.session.user.userid;
 
-    try {
-        const goals = await knex("goal")   // <-- lowercase table name
-            .select("*")
-            .where({ userid: userID })     // <-- lowercase column name
-            .orderBy("goal_start_date", "asc");
+  try {
+    const goals = await knex("goal")
+      .select("*")
+      .where({ userid: userID })
+      .orderBy("goal_start_date", "asc");
 
-        res.render("layout", {
-            title: "Goals",
-            bodyPartial: "goals/goals",
-            user: req.session.user,
-            goals,
-            error_message: ""
-        });
-
-    } catch (err) {
-        console.error("Error loading goals:", err);
-        res.status(500).send("Error loading goals");
-    }
+    res.render("layout", {
+      title: "Goals — Temple Tag",
+      bodyPartial: "goals/goals",
+      goals,
+      error_message: "",
+    });
+  } catch (err) {
+    console.error("Error loading goals:", err);
+    res.status(500).send("Error loading goals");
+  }
 });
 
+// Show create goal form
+app.get("/goals/create-goals", (req, res) => {
+  if (!req.session.user) return res.redirect("/login");
+
+  res.render("layout", {
+    title: "Create Goal — Temple Tag",
+    bodyPartial: "goals/create-goals",
+    error_message: "",
+  });
+});
+
+// Handle form submission to create a goal
+app.post("/create-goal", async (req, res) => {
+  if (!req.session.user) return res.redirect("/login");
+
+  const userid = req.session.user.userid;
+  const { title, goal_start_date, goal_end_date, description } = req.body;
+
+  try {
+    await knex("goal").insert({
+      userid: Number(userid),
+      title,
+      goal_start_date,
+      goal_end_date: goal_end_date || null,
+      description,
+    });
+    res.redirect("/goals");
+  } catch (err) {
+    console.error("Error creating goal:", err);
+    res.status(500).send("Error creating goal");
+  }
+});
 
 // Show create goal form
 app.get("/goals/create-goals", (req, res) => {
