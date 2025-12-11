@@ -1,0 +1,76 @@
+<% title = "Create Goal"; %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<main class="container">
+
+    <div class="page-header">
+        <h1>Create a New Goal</h1>
+        <p class="subtitle">Set a goal that motivates and guides your temple attendance.</p>
+    </div>
+
+    <form class="form-card" action="/create-goal" method="POST">
+
+        <!-- Title -->
+        <div class="form-group">
+            <label for="title">Goal Title</label>
+            <input
+                type="text"
+                id="title"
+                name="title"
+                placeholder="Ex: Attend 12 different temples"
+                required
+            >
+        </div>
+
+        <!-- Start Date -->
+        <div class="form-group">
+            <label for="goal_start_date">Start Date</label>
+            <input
+                type="date"
+                id="goal_start_date"
+                name="goal_start_date"
+                required
+            >
+        </div>
+
+        <!-- End Date -->
+        <div class="form-group">
+            <label for="goal_end_date">End Date (optional)</label>
+            <input
+                type="date"
+                id="goal_end_date"
+                name="goal_end_date"
+            >
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+            <label for="description">Goal Description</label>
+            <textarea
+                id="description"
+                name="description"
+                rows="4"
+                placeholder="Describe your goal: purpose, motivation, or specific milestones."
+                required
+            ></textarea>
+        </div>
+
+        <div class="form-actions">
+            <button class="btn secondary" onclick="history.back()">Cancel</button>
+            <button type="submit" class="btn primary">Create Goal</button>
+        </div>
+
+    </form>
+
+</main>
+
+</body>
+</html>

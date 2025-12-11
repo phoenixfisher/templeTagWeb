@@ -1,0 +1,74 @@
+<% title = "My Goals"; %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<main class="container">
+
+    <div class="page-header">
+        <h1>My Goals</h1>
+        <p class="subtitle">Track your progress and stay consistent</p>
+    </div>
+
+    <div class="row-between">
+        <h2>Your Goals</h2>
+        <a class="btn primary" href="/goals/create-goals">+ New Goal</a>
+    </div>
+
+    <section class="goals-list">
+        <% if (!goals || goals.length === 0) { %>
+
+            <div class="empty-state">
+                No goals yet. Create your first goal!
+            </div>
+
+        <% } else { %>
+
+            <ul class="goals-ul">
+
+                <% goals.forEach(goal => { %>
+
+                    <li class="goal-item">
+
+                        <div class="goal-header">
+                            <h3 class="goal-title"><%= goal.title %></h3>
+
+                            <div class="goal-dates">
+                                <span>
+                                    <strong>Start:</strong>
+                                    <%= goal.goal_start_date.toISOString().slice(0, 10) %>
+                                </span>
+
+                                <% if (goal.goal_end_date) { %>
+                                    <span>
+                                        <strong>End:</strong>
+                                        <%= goal.goal_end_date.toISOString().slice(0, 10) %>
+                                    </span>
+                                <% } %>
+                            </div>
+                        </div>
+
+                        <p class="goal-description">
+                            <%= goal.description %>
+                        </p>
+
+                    </li>
+
+                <% }) %>
+
+            </ul>
+
+        <% } %>
+
+    </section>
+
+</main>
+
+</body>
+</html>

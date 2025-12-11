@@ -79,7 +79,7 @@ app.post("/login", async (req, res) => {
     }
 
     req.session.user = {
-      id: user.id,
+      userid: user.userid,
       username: user.username,
       level: user.level,
     };
@@ -188,7 +188,7 @@ app.get("/temples", async(req, res) => {
 
 app.get("/users", async (req, res) => {
   try {
-    const users = await knex("users").select("id", "username", "level");
+    const users = await knex("users").select("userid", "username", "level");
 
     res.render("layout", {
       title: "Users — Temple Tag",
@@ -207,6 +207,71 @@ app.get("/users", async (req, res) => {
     });
   }
 });
+
+// -------------------------
+// Goals
+// -------------------------
+
+// Show all goals for the logged-in user
+app.get("/goals", async (req, res) => {
+    if (!req.session.user) return res.redirect("/login");
+
+    const userID = req.session.user.userid;
+
+    try {
+        const goals = await knex("goal")   // <-- lowercase table name
+            .select("*")
+            .where({ userid: userID })     // <-- lowercase column name
+            .orderBy("goal_start_date", "asc");
+
+        res.render("goals/goals", {
+            user: req.session.user,
+            goals
+        });
+
+    } catch (err) {
+        console.error("Error loading goals:", err);
+        res.status(500).send("Error loading goals");
+    }
+});
+
+
+// Show create goal form
+app.get("/goals/create-goals", (req, res) => {
+    if (!req.session.user) return res.redirect("/login");
+
+    res.render("goals/create-goals", {
+        user: req.session.user
+    });
+});
+
+
+// Handle form submission to create a goal
+app.post("/create-goal", async (req, res) => {
+    if (!req.session.user) return res.redirect("/login");
+
+    const userid = req.session.user.userid;
+
+    const { title, goal_start_date, goal_end_date, description } = req.body;
+
+    try {
+        await knex("goal").insert({
+            userid: Number(userid),
+            title,
+            goal_start_date,
+            goal_end_date: goal_end_date || null,
+            description
+        });
+
+        res.redirect("/goals");
+
+    } catch (err) {
+        console.error("Error creating goal:", err);
+        res.status(500).send("Error creating goal");
+    }
+});
+
+
 
 // -------------------------
 // Start server
