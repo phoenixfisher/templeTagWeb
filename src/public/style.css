@@ -383,6 +383,8 @@ button,
 .pill.dedicated { background: #e8f5e9; color: #1b5e20; }
 .pill.under_construction { background: #fff8e1; color: #f57f17; }
 .pill.announced { background: #ede7f6; color: #5e35b1; }
+.pill.completed { background: #e6f4ea; color: #166534; border: 1px solid #9ad1a7; }
+.pill.active { background: #e0f7fa; color: #0f2f47; border: 1px solid #b2ebf2; }
 
 .temple-layout {
     display: grid;

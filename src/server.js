@@ -21,6 +21,17 @@ const knex = require("knex")({
     }
 });
 
+// Ensure new columns exist without separate migration
+async function ensureGoalSchema() {
+  const hasCompleted = await knex.schema.hasColumn("goal", "is_completed");
+  if (!hasCompleted) {
+    await knex.schema.alterTable("goal", (table) => {
+      table.boolean("is_completed").notNullable().defaultTo(false);
+    });
+    console.log("Added goal.is_completed column");
+  }
+}
+
 //EJS + MiddleWare
 app.use(session({
     secret: "supersecret123",
@@ -249,7 +260,7 @@ app.get("/goals", requireLogin, async (req, res) => {
     const goals = await knex("goal")
       .select("*")
       .where({ userid: userID })
-      .orderBy("goal_start_date", "asc");
+      .orderBy([{ column: "is_completed", order: "asc" }, { column: "goal_start_date", order: "asc" }]);
 
     res.render("layout", {
       title: "Goals — Temple Tag",
@@ -285,6 +296,7 @@ app.post("/create-goal", requireLogin, async (req, res) => {
       goal_start_date,
       goal_end_date: goal_end_date || null,
       description,
+      is_completed: false,
     });
     res.redirect("/goals");
   } catch (err) {
@@ -401,9 +413,55 @@ app.post("/goals/bulk-delete", requireLogin, async (req, res) => {
   }
 });
 
-// -------------------------
-// Start server
-// -------------------------
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+// Mark goal completed
+app.post("/goals/:goalid/complete", requireLogin, async (req, res) => {
+  const goalid = Number(req.params.goalid);
+  const userid = req.session.user.userid;
+  if (!Number.isInteger(goalid)) return res.status(400).send("Invalid goal id");
+
+  try {
+    await knex("goal")
+      .where({ goalid, userid })
+      .update({ is_completed: true });
+
+    res.redirect("/goals");
+  } catch (err) {
+    console.error("Error completing goal:", err);
+    res.status(500).send("Error completing goal");
+  }
 });
+
+// Mark goal active again
+app.post("/goals/:goalid/uncomplete", requireLogin, async (req, res) => {
+  const goalid = Number(req.params.goalid);
+  const userid = req.session.user.userid;
+  if (!Number.isInteger(goalid)) return res.status(400).send("Invalid goal id");
+
+  try {
+    await knex("goal")
+      .where({ goalid, userid })
+      .update({ is_completed: false });
+
+    res.redirect("/goals");
+  } catch (err) {
+    console.error("Error marking goal active:", err);
+    res.status(500).send("Error updating goal");
+  }
+});
+
+// -------------------------
+// Start server after ensuring schema
+// -------------------------
+async function startServer() {
+  try {
+    await ensureGoalSchema();
+    app.listen(PORT, () => {
+      console.log(`Server running at http://localhost:${PORT}`);
+    });
+  } catch (err) {
+    console.error("Failed to start server:", err);
+    process.exit(1);
+  }
+}
+
+startServer();
