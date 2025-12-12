@@ -52,7 +52,6 @@ nav a { color: white; font-weight: 500; }
     border: 1px solid transparent;
     font-weight: 700;
     font-size: 0.95rem;
-    cursor: pointer;
     transition: all 0.18s ease;
     text-decoration: none;
 }
@@ -85,10 +84,22 @@ nav a { color: white; font-weight: 500; }
     padding: 0.75rem 1.5rem;
     border-radius: 6px;
     font-size: 1rem;
-    cursor: pointer;
     transition: background 0.2s ease;
 }
 .primary-btn:hover { background: #e0f7fa; }
+
+.goal-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+}
+
+.goal-bulk-form {
+    display: none;
+    align-items: center;
+    gap: 0.75rem;
+}
 
 .features {
     display: grid;
@@ -127,6 +138,13 @@ nav a { color: white; font-weight: 500; }
   color: var(--light);
   text-decoration: none;
   font-weight: 600;
+}
+
+button,
+.btn,
+.primary-btn,
+.page-btn {
+    cursor: pointer;
 }
 
 .page-btn[aria-disabled="true"] {
@@ -389,6 +407,7 @@ nav a { color: white; font-weight: 500; }
     .card-media { height: 130px; }
     .goal-header { align-items: flex-start; flex-direction: column; }
     .visit-form { flex-direction: column; align-items: stretch; }
+    .goal-actions { flex-wrap: wrap; justify-content: flex-end; }
 }
 
 @media (max-width: 800px) {
@@ -480,6 +499,9 @@ nav a { color: white; font-weight: 500; }
     border: 1px solid #e5e7eb;
     border-radius: 10px;
     padding: 18px;
+}
+.goal-card-item.selecting {
+    padding-left: 2.6rem !important;
 }
 
 .goal-dates {
