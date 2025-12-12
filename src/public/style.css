@@ -78,7 +78,8 @@ nav a { color: white; font-weight: 500; }
 .hero h2 { font-size: 2rem; margin-bottom: 1rem; }
 .hero p { font-size: 1.1rem; margin-bottom: 2rem; }
 .primary-btn {
-    color: var(--blue-2);
+    background: white;
+    color: var(--blue);
     border: none;
     padding: 0.75rem 1.5rem;
     border-radius: 6px;
