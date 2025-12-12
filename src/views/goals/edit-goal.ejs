@@ -1,0 +1,76 @@
+<section class="page">
+  <div class="stack">
+    <p class="eyebrow">Edit Goal</p>
+    <h2>Update your temple goal</h2>
+    <p class="muted">Adjust the title, dates, or description to keep your plan on track.</p>
+  </div>
+
+  <div class="temple-layout">
+    <aside class="card filters">
+      <div class="stack">
+        <strong>Need ideas?</strong>
+        <p class="muted">Tighten your scope, pick a time frame, and write a quick note about why it matters.</p>
+      </div>
+      <div class="stack">
+        <strong>Tip</strong>
+        <p class="muted">If your plans changed, shorten the list instead of deleting progress.</p>
+      </div>
+    </aside>
+
+    <div class="card" style="padding: 1.2rem;">
+      <form class="stack" action="/goals/<%= goal.goalid %>/update" method="POST">
+        <div class="row-between" style="align-items: center; gap: 0.75rem;">
+          <div class="stack">
+            <h3>Edit goal</h3>
+            <p class="muted">Make your changes below and save when you’re done.</p>
+          </div>
+          <button class="primary-btn" type="submit">Save changes</button>
+        </div>
+
+        <div class="stack">
+          <label class="stack">
+            <span style="font-weight:600; color: var(--blue);">Goal title</span>
+            <input
+              class="input"
+              type="text"
+              name="title"
+              value="<%= goal.title %>"
+              required
+            />
+          </label>
+
+          <div class="row-between" style="gap: 0.75rem; align-items: flex-start; flex-wrap: wrap;">
+            <label class="stack" style="flex:1; min-width: 220px;">
+              <span style="font-weight:600; color: var(--blue);">Start date</span>
+              <input class="input" type="date" name="goal_start_date" value="<%= new Date(goal.goal_start_date).toISOString().slice(0, 10) %>" required />
+            </label>
+            <label class="stack" style="flex:1; min-width: 220px;">
+              <span style="font-weight:600; color: var(--blue);">End date (optional)</span>
+              <input class="input" type="date" name="goal_end_date" value="<%= goal.goal_end_date ? new Date(goal.goal_end_date).toISOString().slice(0, 10) : '' %>" />
+            </label>
+          </div>
+
+          <label class="stack">
+            <span style="font-weight:600; color: var(--blue);">Description</span>
+            <textarea
+              class="input"
+              name="description"
+              rows="4"
+              required
+              style="resize: vertical;"
+            ><%= goal.description %></textarea>
+          </label>
+        </div>
+
+        <div class="row-between" style="gap: 0.75rem; align-items: center;">
+          <a class="page-btn" href="/goals" style="text-align:center;">Cancel</a>
+          <div class="row-between" style="gap: 0.5rem;">
+            <button class="page-btn" type="submit" form="delete-goal-form" style="background:#fee2e2; color:#991b1b; border-color:#fca5a5;" onclick="return confirm('Delete this goal?');">Delete</button>
+            <button class="primary-btn" type="submit">Save changes</button>
+          </div>
+        </div>
+      </form>
+      <form id="delete-goal-form" action="/goals/<%= goal.goalid %>/delete" method="POST"></form>
+    </div>
+  </div>
+</section>

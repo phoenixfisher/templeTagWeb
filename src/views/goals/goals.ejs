@@ -1,0 +1,187 @@
+<section class="page">
+  <div class="stack">
+    <p class="eyebrow">Your Progress</p>
+    <h2>Set goals and track your temple visits</h2>
+    <p class="muted">Stay organized with a simple checklist of the temples you plan to visit next.</p>
+  </div>
+
+  <div class="temple-layout">
+    <aside class="card filters">
+      <div class="stack">
+        <strong>Quick tips</strong>
+        <p class="muted">Pick 3–5 temples to focus on. Keep it realistic and celebrate small wins.</p>
+      </div>
+      <div class="stack">
+        <strong>Ideas</strong>
+        <ul class="muted" style="display: grid; gap: 0.4rem; padding-left: 1rem; list-style: disc;">
+          <li>Plan one new temple visit each quarter</li>
+          <li>Schedule an appointment for your next trip</li>
+          <li>Add notes about travel or family names</li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="card" style="padding: 1.2rem;">
+      <div class="row-between" style="align-items: center; gap: 0.75rem;">
+        <div class="stack">
+          <h3>Your goals</h3>
+          <p class="muted"><%= goals && goals.length ? `${goals.length} active goal${goals.length === 1 ? '' : 's'}` : "No goals yet. Create your first goal!" %></p>
+        </div>
+        <div class="goal-actions">
+          <form id="bulk-delete-form" action="/goals/bulk-delete" method="POST" class="goal-bulk-form">
+            <p class="muted" id="selected-count">No goals selected</p>
+            <button id="bulk-delete-btn" class="page-btn" type="submit" style="background:#fee2e2; color:#991b1b; border-color:#fca5a5;" onclick="return confirm('Delete selected goals?');" disabled>Delete selected</button>
+          </form>
+          <button class="page-btn" id="toggle-manage-btn" type="button" style="background:#eef3f7; color:#0f2f47; border-color:#dce3e8;">Select multiple</button>
+          <a class="primary-btn" href="/goals/create-goals">New Goal</a>
+        </div>
+      </div>
+
+      <% if (!goals || goals.length === 0) { %>
+        <div class="stack" style="margin-top: 1rem;">
+          <p class="muted">Nothing here yet. Add a goal to get started.</p>
+        </div>
+      <% } else { %>
+        <% const fmtDate = (d) => {
+          if (!d) return null;
+          try { return new Date(d).toISOString().slice(0, 10); } catch (e) { return ""; }
+        }; %>
+        <% const activeGoals = goals.filter(g => !g.is_completed); const completedGoals = goals.filter(g => g.is_completed); %>
+
+        <% if (activeGoals.length) { %>
+          <div class="stack" style="margin-top: 1rem; gap: 0.65rem;">
+            <h4 style="margin:0; color:#0f2f47;">In progress</h4>
+            <% activeGoals.forEach(goal => { %>
+              <article class="card goal-card-item" style="padding: 0.9rem 1rem; box-shadow: none; position: relative;">
+                <div class="goal-checkbox">
+                  <input type="checkbox" class="goal-select" name="goal_ids" value="<%= goal.goalid %>" form="bulk-delete-form" />
+                </div>
+                <div class="row-between" style="align-items: center; gap: 0.5rem;">
+                  <div class="stack" style="gap:0.3rem;">
+                    <h4 style="margin:0;"><%= goal.title %></h4>
+                    <div class="muted" style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+                      <span class="pill active">In progress</span>
+                    </div>
+                    <% const start = fmtDate(goal.goal_start_date); const end = fmtDate(goal.goal_end_date); %>
+                    <div class="muted" style="display: flex; gap: 0.75rem; font-size: 0.9rem; flex-wrap:wrap;">
+                      <% if (start) { %><span><strong>Start:</strong> <%= start %></span><% } %>
+                      <% if (end) { %><span><strong>End:</strong> <%= end %></span><% } %>
+                    </div>
+                  </div>
+                  <div class="row-between" style="gap:0.5rem; align-items:center;">
+                    <form action="/goals/<%= goal.goalid %>/complete" method="POST">
+                      <button type="submit" class="page-btn" style="background:#e6f4ea; color:#166534; border-color:#9ad1a7;">Mark complete</button>
+                    </form>
+                    <form action="/goals/<%= goal.goalid %>/edit" method="GET">
+                      <button type="submit" class="page-btn" style="background:#e3f2ff; color:#0f2f47; border-color:#bcdfff;">Edit</a>
+                    </form>
+                    <form action="/goals/<%= goal.goalid %>/delete" method="POST" onsubmit="return confirm('Delete this goal?');">
+                      <button type="submit" class="page-btn" style="background:#fee2e2; color:#991b1b; border-color:#fca5a5;">Delete</button>
+                    </form>
+                  </div>
+                </div>
+                <p class="muted" style="margin-top: 0.35rem;"><%= goal.description %></p>
+              </article>
+            <% }) %>
+          </div>
+        <% } %>
+
+        <% if (completedGoals.length) { %>
+          <div class="stack" style="margin-top: 1.25rem; gap: 0.65rem;">
+            <h4 style="margin:0; color:#0f2f47;">Completed</h4>
+            <% completedGoals.forEach(goal => { %>
+              <article class="card goal-card-item" style="padding: 0.9rem 1rem; box-shadow: none; position: relative;">
+                <div class="goal-checkbox">
+                  <input type="checkbox" class="goal-select" name="goal_ids" value="<%= goal.goalid %>" form="bulk-delete-form" />
+                </div>
+                <div class="row-between" style="align-items: center; gap: 0.5rem;">
+                  <div class="stack" style="gap:0.3rem;">
+                    <h4 style="margin:0;"><%= goal.title %></h4>
+                    <div class="muted" style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+                      <span class="pill completed">Completed</span>
+                    </div>
+                    <% const start = fmtDate(goal.goal_start_date); const end = fmtDate(goal.goal_end_date); %>
+                    <div class="muted" style="display: flex; gap: 0.75rem; font-size: 0.9rem; flex-wrap:wrap;">
+                      <% if (start) { %><span><strong>Start:</strong> <%= start %></span><% } %>
+                      <% if (end) { %><span><strong>End:</strong> <%= end %></span><% } %>
+                    </div>
+                  </div>
+                  <div class="row-between" style="gap:0.5rem; align-items:center;">
+                    <form action="/goals/<%= goal.goalid %>/uncomplete" method="POST">
+                      <button type="submit" class="page-btn" style="background:#e0f7fa; color:#0f2f47; border-color:#b2ebf2;">Mark active</button>
+                    </form>
+                    <form action="/goals/<%= goal.goalid %>/edit" method="GET">
+                      <button type="submit" class="page-btn" style="background:#e3f2ff; color:#0f2f47; border-color:#bcdfff;">Edit</a>
+                    </form>
+                    <form action="/goals/<%= goal.goalid %>/delete" method="POST" onsubmit="return confirm('Delete this goal?');">
+                      <button type="submit" class="page-btn" style="background:#fee2e2; color:#991b1b; border-color:#fca5a5;">Delete</button>
+                    </form>
+                  </div>
+                </div>
+                <p class="muted" style="margin-top: 0.35rem;"><%= goal.description %></p>
+              </article>
+            <% }) %>
+          </div>
+        <% } %>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<script>
+  (() => {
+    const manageBtn = document.getElementById("toggle-manage-btn");
+    const bulkForm = document.getElementById("bulk-delete-form");
+    const checkboxes = Array.from(document.querySelectorAll(".goal-select"));
+    const selectedCount = document.getElementById("selected-count");
+    const bulkDeleteBtn = document.getElementById("bulk-delete-btn");
+    const goalCards = Array.from(document.querySelectorAll(".goal-card-item"));
+    const checkboxContainers = Array.from(document.querySelectorAll(".goal-checkbox"));
+
+    const isSelecting = () => manageBtn && manageBtn.dataset.active === "1";
+
+    const updateCount = () => {
+      const count = checkboxes.filter(cb => cb.checked).length;
+      selectedCount.textContent = count ? `${count} selected` : "No goals selected";
+      bulkDeleteBtn.disabled = count === 0;
+      goalCards.forEach((card, idx) => {
+        const cb = checkboxes[idx];
+        if (cb) card.classList.toggle("selected", isSelecting() && cb.checked);
+      });
+    };
+
+    if (manageBtn && checkboxes.length) {
+      manageBtn.addEventListener("click", () => {
+        const nextState = !isSelecting();
+        manageBtn.dataset.active = nextState ? "1" : "0";
+        manageBtn.textContent = nextState ? "Done selecting" : "Select multiple";
+        bulkForm.style.display = nextState ? "flex" : "none";
+        goalCards.forEach(card => card.classList.toggle("selecting", nextState));
+        checkboxContainers.forEach(box => { box.style.display = nextState ? "block" : "none"; });
+        if (!nextState) {
+          checkboxes.forEach(cb => { cb.checked = false; });
+        }
+        updateCount();
+      });
+    } else if (manageBtn) {
+      manageBtn.disabled = true;
+      manageBtn.textContent = "No goals to manage";
+      manageBtn.style.opacity = "0.6";
+      manageBtn.style.cursor = "not-allowed";
+    }
+
+    goalCards.forEach((card, idx) => {
+      const cb = checkboxes[idx];
+      if (!cb) return;
+      card.addEventListener("click", (evt) => {
+        if (!isSelecting()) return;
+        if (evt.target.closest("a") || evt.target.closest("button") || evt.target.closest("form") || evt.target.closest(".goal-checkbox")) return;
+        cb.checked = !cb.checked;
+        updateCount();
+      });
+    });
+
+    checkboxes.forEach(cb => cb.addEventListener("change", updateCount));
+    updateCount();
+  })();
+</script>
