@@ -5,6 +5,7 @@
       <h2>Registered accounts</h2>
       <p class="muted">Basic list of usernames and levels. Passwords are never shown.</p>
     </div>
+    <a class="primary-btn" href="/create-account">New User</a>
   </div>
 
   <% if (error_message) { %>
@@ -21,6 +22,7 @@
             <th>ID</th>
             <th>Username</th>
             <th>Level</th>
+            <th style="width:180px;">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -29,6 +31,14 @@
               <td><%= u.userid %></td>
               <td><%= u.username %></td>
               <td><%= u.level || "N/A" %></td>
+              <td style="display:flex; gap:0.5rem;">
+                <form action="/users/<%= u.userid %>/edit" method="GET">
+                  <button type="submit" class="page-btn" style="background:#e3f2ff; color:#0f2f47; border-color:#bcdfff;">Edit</a>
+                </form>
+                <form action="/users/<%= u.userid %>/delete" method="POST" onsubmit="return confirm('Delete this user?');">
+                  <button type="submit" class="page-btn" style="background:#fee2e2; color:#991b1b; border-color:#fca5a5;">Delete</button>
+                </form>
+              </td>
             </tr>
           <% }) %>
         </tbody>

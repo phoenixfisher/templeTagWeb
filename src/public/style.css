@@ -78,7 +78,6 @@ nav a { color: white; font-weight: 500; }
 .hero h2 { font-size: 2rem; margin-bottom: 1rem; }
 .hero p { font-size: 1.1rem; margin-bottom: 2rem; }
 .primary-btn {
-    background: white;
     color: var(--blue-2);
     border: none;
     padding: 0.75rem 1.5rem;
@@ -385,6 +384,8 @@ button,
 .pill.announced { background: #ede7f6; color: #5e35b1; }
 .pill.completed { background: #e6f4ea; color: #166534; border: 1px solid #9ad1a7; }
 .pill.active { background: #e0f7fa; color: #0f2f47; border: 1px solid #b2ebf2; }
+.pill.admin { background: #e3f2ff; color: #0f2f47; border: 1px solid #bcdfff; }
+.pill.user { background: #f8fafc; color: #334155; border: 1px solid #e2e8f0; }
 
 .temple-layout {
     display: grid;
@@ -502,11 +503,13 @@ button,
     border-radius: 10px;
     padding: 18px;
 }
-.goal-card-item.selecting {
+.goal-card-item.selecting,
+.user-card-item.selecting {
     cursor: pointer;
     padding-right: 2.5rem !important;
 }
-.goal-card-item.selected {
+.goal-card-item.selected,
+.user-card-item.selected {
     background: #f1f5f9;
     border-color: #cbd5e1;
     box-shadow: inset 0 0 0 1px #cbd5e1;

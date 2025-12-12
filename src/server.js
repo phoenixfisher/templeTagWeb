@@ -226,7 +226,7 @@ app.get("/temples", async (req, res) => {
 // USERS
 // -------------------------
 
-app.get("/users", async (req, res) => {
+app.get("/users", requireLogin, async (req, res) => {
   try {
     const users = await knex("users").select("userid", "username", "level");
 
@@ -245,6 +245,73 @@ app.get("/users", async (req, res) => {
       users: [],
       error_message: "Unable to load users right now."
     });
+  }
+});
+
+// User edit form
+app.get("/users/:userid/edit", requireLogin, async (req, res) => {
+  const userid = Number(req.params.userid);
+  if (!Number.isInteger(userid)) return res.status(400).send("Invalid user id");
+  try {
+    const user = await knex("users").where({ userid }).first();
+    if (!user) return res.status(404).send("User not found");
+
+    res.render("layout", {
+      title: `Edit User — ${user.username}`,
+      bodyPartial: "users/edit-user",
+      userRecord: user,
+      error_message: "",
+    });
+  } catch (err) {
+    console.error("Failed to load user:", err.message);
+    res.status(500).send("Unable to load user");
+  }
+});
+
+// Update user
+app.post("/users/:userid/update", requireLogin, async (req, res) => {
+  const userid = Number(req.params.userid);
+  if (!Number.isInteger(userid)) return res.status(400).send("Invalid user id");
+
+  const { username, level, password } = req.body;
+  const updates = { username, level };
+  if (password) updates.password = password;
+
+  try {
+    await knex("users").where({ userid }).update(updates);
+    res.redirect("/users");
+  } catch (err) {
+    console.error("Failed to update user:", err.message);
+    res.status(500).send("Unable to update user");
+  }
+});
+
+// Delete single user
+app.post("/users/:userid/delete", requireLogin, async (req, res) => {
+  const userid = Number(req.params.userid);
+  if (!Number.isInteger(userid)) return res.status(400).send("Invalid user id");
+  try {
+    await knex("users").where({ userid }).del();
+    res.redirect("/users");
+  } catch (err) {
+    console.error("Failed to delete user:", err.message);
+    res.status(500).send("Unable to delete user");
+  }
+});
+
+// Bulk delete users
+app.post("/users/bulk-delete", requireLogin, async (req, res) => {
+  const idsRaw = req.body.user_ids;
+  const ids = Array.isArray(idsRaw) ? idsRaw : idsRaw ? [idsRaw] : [];
+  const cleaned = ids.map(n => Number(n)).filter(n => Number.isInteger(n));
+  if (!cleaned.length) return res.redirect("/users");
+
+  try {
+    await knex("users").whereIn("userid", cleaned).del();
+    res.redirect("/users");
+  } catch (err) {
+    console.error("Failed to bulk delete users:", err.message);
+    res.status(500).send("Unable to delete users");
   }
 });
 

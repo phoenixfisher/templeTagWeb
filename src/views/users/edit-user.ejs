@@ -1,0 +1,46 @@
+<section class="page">
+  <div class="stack">
+    <p class="eyebrow">Edit user</p>
+    <h2>Update account details</h2>
+    <p class="muted">Change username, level, or set a new password.</p>
+  </div>
+
+  <div class="card" style="padding: 1.2rem;">
+    <form class="stack" action="/users/<%= userRecord.userid %>/update" method="POST">
+      <div class="row-between" style="align-items: center; gap: 0.75rem;">
+        <div class="stack">
+          <h3 style="margin:0;">Account</h3>
+          <p class="muted" style="margin:0;">Make your changes and save.</p>
+        </div>
+        <button class="primary-btn" type="submit">Save changes</button>
+      </div>
+
+      <label class="stack">
+        <span style="font-weight:600; color: var(--blue);">Username</span>
+        <input class="input" type="text" name="username" value="<%= userRecord.username %>" required />
+      </label>
+
+      <label class="stack">
+        <span style="font-weight:600; color: var(--blue);">Level</span>
+        <select class="input" name="level" required>
+          <option value="U" <%= userRecord.level === "U" ? "selected" : "" %>>User</option>
+          <option value="A" <%= userRecord.level === "A" ? "selected" : "" %>>Admin</option>
+        </select>
+      </label>
+
+      <label class="stack">
+        <span style="font-weight:600; color: var(--blue);">Password (optional)</span>
+        <input class="input" type="text" name="password" placeholder="Leave blank to keep current password" />
+      </label>
+
+      <div class="row-between" style="gap: 0.75rem; align-items: center;">
+        <a class="page-btn" href="/users" style="text-align:center;">Cancel</a>
+        <div class="row-between" style="gap: 0.5rem;">
+          <button class="page-btn" type="submit" form="delete-user-form" style="background:#fee2e2; color:#991b1b; border-color:#fca5a5;" onclick="return confirm('Delete this user?');">Delete</button>
+          <button class="primary-btn" type="submit">Save changes</button>
+        </div>
+      </div>
+    </form>
+    <form id="delete-user-form" action="/users/<%= userRecord.userid %>/delete" method="POST"></form>
+  </div>
+</section>
