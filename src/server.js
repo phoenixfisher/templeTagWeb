@@ -21,6 +21,15 @@ const knex = require("knex")({
     }
 });
 
+console.log("DB ENV CHECK:", {
+  RDS_HOSTNAME: process.env.RDS_HOSTNAME,
+  RDS_USERNAME: process.env.RDS_USERNAME,
+  RDS_DB_NAME: process.env.RDS_DB_NAME,
+  RDS_PORT: process.env.RDS_PORT,
+  DB_SSL: process.env.DB_SSL
+});
+
+
 // Ensure new columns exist without separate migration
 async function ensureGoalSchema() {
   const hasCompleted = await knex.schema.hasColumn("goal", "is_completed");
