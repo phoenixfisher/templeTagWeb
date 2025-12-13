@@ -21,6 +21,7 @@ const knex = require("knex")({
     }
 });
 
+
 // Ensure new columns exist without separate migration
 async function ensureGoalSchema() {
   const hasCompleted = await knex.schema.hasColumn("goal", "is_completed");
@@ -524,6 +525,13 @@ async function startServer() {
     await ensureGoalSchema();
     app.listen(PORT, () => {
       console.log(`Server running at http://localhost:${PORT}`);
+      console.log("EB DB CONFIG:", {
+        host: process.env.RDS_HOSTNAME,
+        user: process.env.RDS_USERNAME,
+        database: process.env.RDS_DB_NAME,
+        port: process.env.RDS_PORT,
+        ssl: process.env.RDS_SSL
+      });
     });
   } catch (err) {
     console.error("Failed to start server:", err);
