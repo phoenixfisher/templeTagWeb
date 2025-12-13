@@ -525,13 +525,13 @@ async function startServer() {
     await ensureGoalSchema();
     app.listen(PORT, () => {
       console.log(`Server running at http://localhost:${PORT}`);
-      console.log("DB ENV CHECK:", {
-        RDS_HOSTNAME: process.env.RDS_HOSTNAME,
-        RDS_USERNAME: process.env.RDS_USERNAME,
-        RDS_DB_NAME: process.env.RDS_DB_NAME,
-        RDS_PORT: process.env.RDS_PORT,
-        DB_SSL: process.env.DB_SSL
-});
+      console.log("EB DB CONFIG:", {
+        host: process.env.RDS_HOSTNAME,
+        user: process.env.RDS_USERNAME,
+        database: process.env.RDS_DB_NAME,
+        port: process.env.RDS_PORT,
+        ssl: process.env.RDS_SSL
+      });
     });
   } catch (err) {
     console.error("Failed to start server:", err);
